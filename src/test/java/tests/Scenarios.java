@@ -3,7 +3,9 @@ package tests;
 import base.BaseTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -88,18 +90,8 @@ public class Scenarios extends BaseTest {
         driver=getDriver();
         wait=new WebDriverWait(driver,Duration.ofSeconds(15));
         driver.manage().window().maximize();
-       /* Scenario-2
 
-
-
-        4.  Register formun tüm alanlari doldurun ve "Continue" butonuna tiklayin
-        Bilgiler Fake olabilir.
-        5.  Account'un create edildigini dogrulayin.
-        6.  MyAccount linkinden Login'e tiklayin
-        7.  Login bilgilerini girin ve login olun
-        8.  login oldugunuzu dogrulayin
-        9.  MyAccount linkinden logout olun
-        10. Loout oldugunuzu onaylayin*/
+        //Scenario-2
 
         //1.  http://opencart.abstracta.us/ sayfasina gidin
         String url="http://opencart.abstracta.us";
@@ -108,23 +100,82 @@ public class Scenarios extends BaseTest {
         //.findElement(By.xpath("//span[text()='My Account']")).click();
         click(myAccount);
         //3.  Popup'in acilmasini bekleyin ve Register'a tiklayin
-        driver.findElement(By.xpath("//a[text()='Register']")).click();
+        click(registerButton);
         //4.  Register formun tüm alanlari doldurun ve "Continue" butonuna tiklayin
         //Bilgiler Fake olabilir.
         sendkeys(firstName2,"Yasin Murat");
         sendkeys(lastName2,"YENI");
-        sendkeys(emailBox,"murat@gmail");
+        sendkeys(emailBox,"mucta@hotmail.com");
         sendkeys(telBox,"5454345456");
-        sendkeys(password,"12345");
+        sendkeys(passwordBox,"12345");
         sendkeys(passwordConfirmBox,"12345");
         click(agreeBox);
         click(continueButton2);
+        //5.  Account'un create edildigini dogrulayin.
+        waitFor(createVissible,Conditions.visibiltiy);
+        click(createVissible);
+        //6.  MyAccount linkinden Login'e tiklayin
+        click(myAccount);
+        click(logoutButton);
+        click(myAccount);
+        click(login2Button);
+        //7.  Login bilgilerini girin ve login olun
+        sendkeys(email2box,"mucta@hotmail.com");
+        sendkeys(password2box,"12345");
+        click(login2);
+        //8.  login oldugunuzu dogrulayin
+        waitFor(loginPage,Conditions.visibiltiy);
+        //9.  MyAccount linkinden logout olun
+        click(logout2);
+         //10. Loout oldugunuzu onaylayin
+        waitFor(logoutpage,Conditions.visibiltiy);
+        driver.quit();
 
     }
 
     @Test
     public void Scenario3Demoqa(){
+        //Scenario-3
 
+        WebDriverManager.chromedriver().setup();
+       driver=new ChromeDriver();
+       wait=new WebDriverWait(driver, Duration.ofSeconds(15));
+       driver.manage().window().maximize();
+       // 1.  https://demoqa.com/webtables sayfasina gidin
+       String url="https://demoqa.com/webtables";
+       open(url);
+        //2.  "Add" butonuna tiklayin
+        click(addButton);
+        //3.  "Registration Form" dialogundaki bildileri doldurun
+        sendkeys(firstNameBox,"murat");
+        sendkeys(lastNameBox,"YENI");
+        sendkeys(userEmailBox,"ymy@gmail.com");
+        sendkeys(ageBox,"47");
+        sendkeys(salaryBox,"1000");
+        sendkeys(departmentBox,"human research");
+        //4.  "Submit" edin
+        click(submidBox);
+        //5.  Kaydinizin tabloda listelendigini assert edin
+        waitFor(tabloVisibility,Conditions.visibiltiy);
+        //6.  Kaydinizi edit edin
+
+        JavascriptExecutor js=(JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0, 300)");
+
+       // scrollIntoView(forScrolle);
+        click(editButton);
+        //7.  Last name'i degistirin
+        sendkeys(lastNameBox,"YENILMEZ");
+        //8.  Submit edin
+        click(submidBox);
+        //10. Degisen lastname'in tabloda oldugunu dogrulayin
+        String actualLastName=driver.findElement(changeLastName).getText();
+        Assert.assertEquals(actualLastName,expectedLastName);
+        //11. Girdiginiz kaydi silin
+        click(cleanButton);
+        //12. silindigini dogrulayin
+        waitFor(changeLastName,Conditions.invisibiltiy);
+        driver.quit();
     }
 
 }

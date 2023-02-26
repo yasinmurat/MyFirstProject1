@@ -8,11 +8,14 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+
 public class Driver {
 
       WebDriver driver;
 
     WebDriverWait wait;
+
 
     /**
      * bu method overload methodu kullanarak default chrome driver return etmeli
@@ -39,7 +42,7 @@ public class Driver {
                 WebDriverManager.safaridriver().setup();
                 return new SafariDriver();
             default:
-                WebDriverManager.chromiumdriver().setup();
+                WebDriverManager.chromedriver().setup();
                 return new ChromeDriver();
 
 

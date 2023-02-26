@@ -139,7 +139,13 @@ public class BaseTest extends Driver {
             default:
                 wait.until(ExpectedConditions.presenceOfElementLocated(locator));
                 break;
+
+
         }
+    }
+
+    protected void isDisplay(By locator){
+        driver.findElement(locator).isDisplayed();
     }
 
 
